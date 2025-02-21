@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="JMMA" />
+<meta name="author" content="Jose Maria Martin Arribas" />
 
 
 <title>Data Science - Capstone - Project Free Breast Cancer</title>
@@ -671,63 +671,70 @@ display: none;
 
 <h1 class="title toc-ignore">Data Science - Capstone - Project Free
 Breast Cancer</h1>
-<h4 class="author">JMMA</h4>
+<h4 class="author">Jose Maria Martin Arribas</h4>
 <h4 class="date">Febrary 2025</h4>
 
 </div>
 
-
+<div id="TOC">
 <ul>
-<li><p><a href="#introduction"><strong>1. INTRODUCTION</strong></a></p>
+<li><a href="#introduction" id="toc-introduction"><strong>1.
+INTRODUCTION</strong></a>
 <ul>
-<li><p><a href="#Loading"><strong>I. Loading libraries and the
-dataset</strong></a></p></li>
-<li><p><a href="#creating_test_and_train_set"><strong>II. Creating test
-and train set (breast_cancer)</strong></a></p></li>
+<li><a href="#Loading" id="toc-Loading"><strong>I. Loading libraries and
+the dataset</strong></a></li>
+<li><a href="#creating_test_and_train_set" id="toc-creating_test_and_train_set"><strong>II. Creating test and train
+set (breast_cancer)</strong></a></li>
 </ul></li>
-<li><p><a href="#data_analysys"><strong>2. DATA
-ANALYSYS</strong></a></p>
+<li><a href="#data_analysys" id="toc-data_analysys"><strong>2. DATA
+ANALYSYS</strong></a>
 <ul>
-<li><p><a href="#data_structure"><strong>I. Data
-structure</strong></a></p></li>
-<li><p><a href="#summaries_data"><strong>II. Summaries
-data</strong></a></p></li>
-<li><p><a href="#study_graphics_statistics"><strong>III. Study graphics
-statistics</strong></a></p>
+<li><a href="#data_structure" id="toc-data_structure"><strong>I. Data
+structure</strong></a></li>
+<li><a href="#summaries_data" id="toc-summaries_data"><strong>II.
+Summaries data</strong></a></li>
+<li><a href="#study_graphics_statistics" id="toc-study_graphics_statistics"><strong>III. Study graphics
+statistics</strong></a>
 <ul>
-<li><a href="#patients_by_amount_glucose_by_health_status"><strong>a.
-Patients by amount of glucose by health status</strong></a></li>
-<li><a href="#patients_by_amount_insulin_by_health_status"><strong>b.
-Patients by amount of insulin by health status</strong></a></li>
-<li><a href="#patients_by_amount_homa_by_health_status"><strong>c. Patients by
+<li><a href="#patients_by_amount_glucose_by_health_status" id="toc-patients_by_amount_glucose_by_health_status"><strong>a. Patients
+by amount of glucose by health status</strong></a></li>
+<li><a href="#patients_by_amount_insulin_by_health_status" id="toc-patients_by_amount_insulin_by_health_status"><strong>b. Patients
+by amount of insulin by health status</strong></a></li>
+<li><a href="#patients_by_amount_homa_by_health_status" id="toc-patients_by_amount_homa_by_health_status"><strong>c. Patients by
 amount of HOMA by health status</strong></a></li>
-<li><a href="#patients_by_amount_resistin_by_health_status"><strong>d. Patients
+<li><a href="#patients_by_amount_resistin_by_health_status" id="toc-patients_by_amount_resistin_by_health_status"><strong>d. Patients
 by amount of resistin by health status</strong></a></li>
-<li><a href="#patients_by_amount_mcp1_by_health_status"><strong>e.
-Patients by amount of MCP.1 by health status</strong></a></li>
+<li><a href="#patients_by_amount_mcp1_by_health_status" id="toc-patients_by_amount_mcp1_by_health_status"><strong>e. Patients by
+amount of MCP.1 by health status</strong></a></li>
 </ul></li>
-<li><p><a href="#conclusion_study_graphic"><strong>IV. Conclusion study
-graphic</strong></a></p></li>
+<li><a href="#conclusion_study_graphic" id="toc-conclusion_study_graphic"><strong>IV. Conclusion study
+graphic</strong></a></li>
 </ul></li>
-<li><p><a href="#machine_learning"><strong>3. MACHINE
-LEARNING</strong></a></p>
+<li><a href="#machine_learning" id="toc-machine_learning"><strong>3.
+MACHINE LEARNING</strong></a>
 <ul>
-<li><p><a href="#pca"><strong>I. PCA (principal component
-analyze)</strong></a></p></li>
-<li><p><a href="#glm"><strong>II. Glm (logistic
-regression)</strong></a></p></li>
-<li><p><a href="#loess"><strong>III. Loess (local polynomial regression
-fitting)</strong></a></p></li>
-<li><p><a href="#kne"><strong>IV. K nearest
-neighbors</strong></a></p></li>
-<li><p><a href="#random_forest"><strong>V. Random
-forest</strong></a></p></li>
-<li><p><a href="#ensamble"><strong>VI. Ensemble</strong></a></p></li>
+<li><a href="#pca" id="toc-pca"><strong>I. PCA (principal component
+analysis)</strong></a></li>
+<li><a href="#glm" id="toc-glm"><strong>II. Glm (logistic
+regression)</strong></a></li>
+<li><a href="#loess" id="toc-loess"><strong>III. Loess (local polynomial
+regression fitting)</strong></a></li>
+<li><a href="#kne" id="toc-kne"><strong>IV. K nearest
+neighbors</strong></a></li>
+<li><a href="#random_forest" id="toc-random_forest"><strong>V. Random
+forest</strong></a></li>
+<li><a href="#ensamble" id="toc-ensamble"><strong>VI.
+Ensemble</strong></a></li>
 </ul></li>
-<li><p><a href="#results"><strong>4. RESULTS</strong></a></p></li>
-<li><p><a href="#conclusion"><strong>5. CONCLUSION</strong></a></p></li>
-<li><p><a href="#references"><strong>6. REFERENCES</strong></a></p></li>
+<li><a href="#results" id="toc-results"><strong>4.
+RESULTS</strong></a></li>
+<li><a href="#conclusion" id="toc-conclusion"><strong>5.
+CONCLUSION</strong></a></li>
+<li><a href="#references" id="toc-references"><strong>6.
+REFERENCES</strong></a></li>
 </ul>
+</div>
+
 <div id="introduction" class="section level1">
 <h1><strong>1. INTRODUCTION</strong></h1>
 <p>The project is based on a dataset provided through: <a href="https://archive.ics.uci.edu/dataset/451/breast+cancer+coimbra" class="uri">https://archive.ics.uci.edu/dataset/451/breast+cancer+coimbra</a></p>
@@ -1639,10 +1646,9 @@ malignant cells.</p>
 <p>In this box plot, we observe of resistin values are more higher than
 cancer patients.</p>
 </div>
-</div>
-<div id="patients_by_amount_mcp1_by_health_status" class="section level2">
-<h2><strong>e. Patients by amount of MCP.1 by health
-status</strong></h2>
+<div id="patients_by_amount_mcp1_by_health_status" class="section level3">
+<h3><strong>e. Patients by amount of MCP.1 by health
+status</strong></h3>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="do">#########################################################</span></span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># e. Patients by amount of MCP.1 by health status</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="do">#########################################################</span></span>
@@ -1669,6 +1675,7 @@ healthy patients or patients with cancer.</p>
 <p>MCP.1 should produce an inflammatory reaction when detecting cancer
 cells. This antibody (monocyte) does not detect cancer cells, which is
 why it is similar in both healthy patients and those with cancer.</p>
+</div>
 </div>
 <div id="conclusion_study_graphic" class="section level2">
 <h2><strong>IV. Conclusion study graphic</strong></h2>

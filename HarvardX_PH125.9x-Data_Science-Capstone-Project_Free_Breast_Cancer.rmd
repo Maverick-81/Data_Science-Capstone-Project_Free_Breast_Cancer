@@ -1,62 +1,22 @@
 ---
 title: "Data Science - Capstone - Project Free Breast Cancer"
-author: "JMMA"
+author: "Jose Maria Martin Arribas"
 date: "Febrary 2025"
 output:
   pdf_document: 
     highlight: pygments
+    toc: true
   html_document: 
     theme: spacelab
     highlight: pygments
     df_print: kable
+    toc: true
 always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
--   [**1. INTRODUCTION**](#introduction)
-
-    -   [**I. Loading libraries and the dataset**](#Loading)
-
-    -   [**II. Creating test and train set (breast_cancer)**](#creating_test_and_train_set)
-
--   [**2. DATA ANALYSYS**](#data_analysys)
-
-    -   [**I. Data structure**](#data_structure)
-
-    -   [**II. Summaries data**](#summaries_data)
-
-    -   [**III. Study graphics statistics**](#study_graphics_statistics)
-
-        -   [**a. Patients by amount of glucose by health status**](#patients_by_amount_glucose_by_health_status)
-        -   [**b. Patients by amount of insulin by health status**](#patients_by_amount_insulin_by_health_status)
-        -   [**c. Patients by amount of HOMA by health status**](#patients_by_amount_homa_by_health_status)
-        -   [**d. Patients by amount of resistin by health status**](#patients_by_amount_resistin_by_health_status)
-        -   [**e. Patients by amount of MCP.1 by health status**](#patients_by_amount_mcp1_by_health_status)
-
-    -   [**IV. Conclusion study graphic**](#conclusion_study_graphic)
-
--   [**3. MACHINE LEARNING**](#machine_learning)
-
-    -   [**I. PCA (principal component analyze)**](#pca)
-
-    -   [**II. Glm (logistic regression)**](#glm)
-
-    -   [**III. Loess (local polynomial regression fitting)**](#loess)
-
-    -   [**IV. K nearest neighbors**](#kne)
-
-    -   [**V. Random forest**](#random_forest)
-
-    -   [**VI. Ensemble**](#ensamble)
-
--   [**4. RESULTS**](#results)
-
--   [**5. CONCLUSION**](#conclusion)
-
--   [**6. REFERENCES**](#references)
 
 # **1. INTRODUCTION** {#introduction}
 
@@ -350,7 +310,7 @@ Resistin is a protein implicated in insulin resistance. Resistin is a predictor 
 
 In this box plot, we observe of resistin values are more higher than cancer patients.
 
-## **e. Patients by amount of MCP.1 by health status** {#patients_by_amount_mcp1_by_health_status}
+### **e. Patients by amount of MCP.1 by health status** {#patients_by_amount_mcp1_by_health_status}
 
 ```{r patients_by_amount_mcp1_by_health_status, message=FALSE, warning=FALSE}
 #########################################################
