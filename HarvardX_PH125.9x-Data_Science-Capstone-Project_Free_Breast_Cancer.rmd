@@ -3,12 +3,12 @@ title: "Data Science - Capstone - Project Free Breast Cancer"
 author: "JMMA"
 date: "Febrary 2025"
 output:
+  pdf_document: 
+    highlight: pygments
   html_document: 
     theme: spacelab
     highlight: pygments
     df_print: kable
-  pdf_document: 
-    highlight: pygments
 always_allow_html: true
 ---
 
