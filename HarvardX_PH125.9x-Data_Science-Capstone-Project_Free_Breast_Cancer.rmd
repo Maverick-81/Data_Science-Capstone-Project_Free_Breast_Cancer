@@ -24,7 +24,7 @@ The project is based on a dataset provided through: <https://archive.ics.uci.edu
 
 We will have to analyze the data using visualization knowledge to make summaries that we observe.
 
-The objective is to use the breast cancer dataset to experiment with multiple predictors (biomarkers in blood analytical) and use cross-validation to create a machine learning with:
+The objective is to use the breast cancer dataset to experiment with multiple predictors (biomarkers in blood analytic) and use cross-validation to create a machine learning with:
 
 -   PCA ( principal component analysis)
 
