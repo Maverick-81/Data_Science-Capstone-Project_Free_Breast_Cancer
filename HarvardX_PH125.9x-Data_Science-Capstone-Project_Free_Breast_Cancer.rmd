@@ -18,6 +18,7 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+\newpage
 # **1. INTRODUCTION** {#introduction}
 
 The project is based on a dataset provided through: <https://archive.ics.uci.edu/dataset/451/breast+cancer+coimbra>
