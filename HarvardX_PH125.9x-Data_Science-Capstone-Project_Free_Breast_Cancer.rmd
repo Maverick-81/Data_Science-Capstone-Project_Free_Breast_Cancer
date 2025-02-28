@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 \newpage
+
 # **1. INTRODUCTION** {#introduction}
 
 The project is based on a dataset provided through: <https://archive.ics.uci.edu/dataset/451/breast+cancer+coimbra>
@@ -401,7 +402,7 @@ In this matrix correlation corroborates relationship between:
 
 -   Insulin to Homa (0.93) and glucose (0.50).
 
--   Glucose to to Homa (0.68) and insulin (0.50).
+-   Glucose to Homa (0.68) and insulin (0.50).
 
 ```{r pca_components, message=FALSE, warning=FALSE}
 #summary importance of components

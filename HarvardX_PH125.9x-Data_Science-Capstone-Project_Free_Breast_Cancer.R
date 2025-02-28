@@ -20,6 +20,13 @@ if(!require(ucimlrepo)) install.packages("recosystem", repos = "http://cran.us.r
 if(!require(gam)) install.packages("gam", repos = "http://cran.us.r-project.org")
 if(!require(splines)) install.packages("splines", repos = "http://cran.us.r-project.org")
 if(!require(foreach)) install.packages("foreach", repos = "http://cran.us.r-project.org")
+# if(!require(pROC)) install.packages("pROC", repos = "http://cran.us.r-project.org")
+# if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
+# if(!require(ada)) install.packages("ada", repos = "http://cran.us.r-project.org")
+# if(!require(rpart.plot)) install.packages("rpart.plot", repos = "http://cran.us.r-project.org")
+# if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
+# if(!require(nnet)) install.packages("nnet", repos = "http://cran.us.r-project.org")
+# if(!require(NeuralNetTools)) install.packages("NeuralNetTools", repos = "http://cran.us.r-project.org")
 
 # Libraries required to run the proyect
 library(tidyverse)
@@ -35,6 +42,13 @@ library(ucimlrepo)
 library(gam)
 library(splines)
 library(foreach)
+# library(pROC)
+# library(rpart)
+# library(ada)
+# library(rpart.plot)
+# library(e1071)
+# library(nnet)
+# library(NeuralNetTools)
 
 options(digits = 5)
 options(timeout = 120)
@@ -63,6 +77,12 @@ breast_train <- breast_data[-test_index,]
 #Breast data will be 80 % of breast cancer data
 breast_test <- breast_data[test_index,]
 
+# # Check for Missing or Null Values
+# missing_values_train <- sum(is.na(breast_train))
+# missing_values_test <- sum(is.na(breast_test))
+# 
+# cat("Number of missing values in train_data:", missing_values_train, "\n")
+# cat("Number of missing values in test_data:", missing_values_test, "\n")
 
 #########################################################
 # 2. ANALYSIS
@@ -99,6 +119,9 @@ kable(summary_breast_train, caption = "Statics breast cancer") %>%
   row_spec(3:4, bold = TRUE, color = "#B22222") %>%
   footnote(general = "This table lists(Age, BMI, Glucose, Insulin, HOMA, Leptin,
            Adiponectin, Resistin, MCP.1, Classification, min, 1st Quantile, median, mean, 3rd Quantiles, max.")
+
+# Correlations
+#cor(breast_train[, sapply(breast_train, is.numeric)])
 
 #########################################################
 # III. Study graphics statistics
@@ -276,7 +299,7 @@ breast_test_y <- breast_test$Classification
 set.seed(1, sample.kind = "Rounding") 
 
 #Use train function to method glm, pass 9 predictors x argument
-#and Classification train healthy status 1-healthy 2-cancer y argument
+#and Classification train healthy status 1-healthy 2-cancer y argument Lda svmLinear gamboost kknn ranger wsfr avNNet mlp monmlp
 train_glm <- train(breast_train_x, breast_train_y, method = "glm")
 
 #Use predict function to pass train_glm and 9 predictors to test data
@@ -326,6 +349,226 @@ knn_preds <- predict(train_knn, breast_test_x)
 #To obtain accuracy compare mean to knn predictions results to Classification test 1-healthy 2-cancer
 mean(knn_preds == breast_test_y)
 
+
+#########################################################
+# . K nearest neihbours 
+#########################################################
+
+# #Define the number of neighbors
+# k <- 9
+# 
+# #Train the KNN model with probabilities using knn3
+# knn_model <- knn3(Classification ~ ., breast_train, k = k)
+# 
+# # Predict probabilities for the positive class in the test set
+# 
+# probabilities_knn <- predict(knn_model,breast_test, type = "prob")[, 2]
+# 
+# #Convert predicted_labels in factor value 1- Healthy 2- Cancer
+# probabilities_knn1 <- as.factor(ifelse(probabilities_knn > 0.5, 0, 1))
+# levels(probabilities_knn1) <- c("Healthy","Cancer")
+# levels(probabilities_knn1) <- c("Healthy","Cancer")
+# 
+# 
+# # Create the confusion matrix
+# confusionMatrix(probabilities_knn1, breast_test$Classification)
+# confusionMatrix(probabilities_knn1, breast_test$Classification)$byClass["F1"]
+# 
+# breast_test$Classification_Predicted <- probabilities_knn1
+# 
+# ggplot(breast_test, aes(x = Age, y = Glucose, color = Classification_Predicted)) +
+#   geom_point(size = 3) +
+#   scale_color_manual(values = c("#27408B", "#B22222")) +
+#   labs(title = paste("Cancer breast Classification with KNN (k =", k, ")"),
+#        x = "Age", 
+#        y = "Glucose") +
+#   theme_gdocs()
+# 
+# # ROC Curve and AUC
+# roc_curve <- roc(breast_test$Classification, probabilities_knn)  # Compute the ROC curve for the KNN model
+# 
+# # Data for the ROC curve
+# roc_data <- data.frame(
+#   tpr = roc_curve$sensitivities,  # True Positive Rate (Sensitivity)
+#   fpr = 1 - roc_curve$specificities  # False Positive Rate (1 - Specificity)
+# )
+# 
+# # Plot the ROC curve
+# roc_plot <- ggplot(roc_data, aes(x = fpr, y = tpr)) +
+#   geom_line(color = "#00688B", size = 1) +  # Draw the ROC curve line
+#   geom_abline(linetype = "dashed", color = "grey") +  # Add a dashed diagonal line (no discrimination line)
+#   labs(title = "ROC Curve - KNN Model",
+#        x = "1 - Specificity",  # Label for the x-axis
+#        y = "Sensitivity") +  # Label for the y-axis
+#   theme_gdocs()
+# 
+# print(roc_plot)
+# 
+# # AUC
+# auc_value_knn <- auc(roc_curve)
+# cat("AUC:", auc_value_knn, "\n")
+
+#########################################################
+# . Tree Model
+#########################################################
+
+# #Train decision tree model
+# decision_tree_model <- rpart(Classification ~ ., data = breast_train, method = "class")
+# 
+# # Predict probabilities for the positive class in the test set
+# probabilities_tree <- predict(decision_tree_model,breast_test, type = "prob")[, 2]
+# 
+# #Convert predicted_labels in factor value 1- Healthy 2- Cancer
+# probabilities_tree1 <- as.factor(ifelse(probabilities_tree > 0.5, 0, 1))
+# levels(probabilities_tree1) <- c("Healthy","Cancer")
+# levels(probabilities_tree1) <- c("Healthy","Cancer")
+# 
+# 
+# # Create the confusion matrix
+# confusionMatrix(probabilities_tree1, breast_test$Classification)
+# confusionMatrix(probabilities_tree1, breast_test$Classification)$byClass["F1"]
+# 
+# breast_test$Classification_Predicted <- probabilities_tree
+# 
+# # ROC Curve and AUC
+# roc_curve <- roc(breast_test$Classification, probabilities_tree)  # Compute the ROC curve for the tree model
+# 
+# # Data for the ROC curve
+# roc_data <- data.frame(
+#   tpr = roc_curve$sensitivities,  # True Positive Rate (Sensitivity)
+#   fpr = 1 - roc_curve$specificities,  # False Positive Rate (1 - Specificity)
+#   thresholds = roc_curve$thresholds
+# )
+# 
+# # Plot the ROC curve
+# roc_plot <- ggplot(roc_data, aes(x = fpr, y = tpr)) +
+#   geom_line(color = "#00688B", size = 1) +  # Draw the ROC curve line
+#   geom_abline(linetype = "dashed", color = "grey") +  # Add a dashed diagonal line (no discrimination line)
+#   labs(title = "ROC Curve - Tree Model",
+#        x = "1 - Specificity",  # Label for the x-axis
+#        y = "Sensitivity") +  # Label for the y-axis
+#   theme_gdocs()
+# 
+# print(roc_plot)
+# 
+# # AUC
+# auc_value_tree_model <- auc(roc_curve)
+# cat("AUC:", auc_value_tree_model, "\n")
+# 
+# 
+# # Plot decision tree
+# rpart.plot(decision_tree_model, main = "Decision Tree",
+#             type = 5, extra = 101, fallen.leaves = TRUE,
+#             box.palette = "RdBu", shadow.col = "gray", nn = TRUE)
+
+
+#########################################################
+# . SVM Model
+#########################################################
+
+# # Train SVM model
+# svm_model <- svm(Classification ~ Glucose + Insulin, data = breast_train, kernel = "polynomial", probability = TRUE)
+# 
+# # Predict probabilities for the positive class in the test set
+# probabilities_svm <- predict(svm_model,breast_test)
+# 
+# # Create the confusion matrix
+# confusionMatrix(probabilities_svm, breast_test$Classification)
+# confusionMatrix(probabilities_svm, breast_test$Classification)$byClass["F1"]
+# 
+# # ROC Curve
+# svm_probs <- attr(predict(svm_model, breast_test, probability = TRUE), "probabilities")[, 2]
+# svm_roc <- roc(breast_test$Classification, svm_probs)
+# plot(svm_roc, main="SVM ROC Curve", col="#4169E1")
+# 
+# auc_value_svm <- auc(svm_roc)
+# cat("AUC:", auc_value_svm, "\n")
+
+# # Create grid of values for Glucose and BMI
+# svm_grid <- expand.grid(
+#   Glucose = seq(min(breast_train$Glucose), max(breast_train$Glucose), length.out = 10),
+#   Insulin = seq(min(breast_train$Insulin), max(breast_train$Insulin), length.out = 10)
+# )
+# 
+# # Predict outcomes for the grid
+# svm_grid$Classification <- predict(svm_model, svm_grid)
+# 
+# # Plot decision boundary
+# ggplot(svm_grid, aes(x = Glucose, y = Insulin, color = Classification)) +
+#   geom_tile(aes(fill = Classification), alpha = 0.5) +
+#   geom_point(data = breast_train, aes(x = Glucose, y = Insulin, color = Classification), size = 3) +
+#   labs(title = "SVM Decision Boundary", x = "Glucose", y = "Insulin") +
+#   scale_color_manual(values = c("#B22222", "#00688B"))
+
+
+#########################################################
+# . Neuronal Network
+#########################################################
+
+# # Preprocess the data by handling missing values and scaling the features
+# breast_train[is.na(breast_train)] <- lapply(breast_train, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
+# breast_test[is.na(breast_test)] <- lapply(breast_test, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
+# 
+# # Scale features to ensure that the neural network performs well
+# train_data_scaled <- scale(breast_train[, c("Glucose", "Insulin", "HOMA", "Resistin")])
+# test_data_scaled <- scale(breast_test[, c("Glucose", "Insulin", "HOMA", "Insulin")])
+# 
+# 
+# # Convert scaled data back to data frame format
+# breast_train_nn <- data.frame(breast_train[, "Classification"], train_data_scaled)
+# colnames(breast_train_nn) <- c("Classification", "Glucose", "Insulin", "HOMA", "Resistin")
+# breast_test_nn <- data.frame(breast_test[, "Classification"], test_data_scaled)
+# colnames(breast_test_nn) <- c("Classification", "Glucose", "Insulin", "HOMA", "Resistin")
+# 
+# # Train the neural network model with adjusted parameters
+# nnet_model <- nnet(Classification ~ Glucose + Insulin + HOMA + Insulin, 
+#                    data = breast_train_nn, 
+#                    size = 15,        
+#                    maxit = 1500,     
+#                    linout = FALSE,   
+#                    trace = FALSE,    
+#                    decay = 1)      
+# 
+# # Make predictions on the test set (probabilities)
+# predicted_probabilities <- predict(nnet_model, breast_test, type ="raw")
+# 
+# # Convert probabilities to binary labels (1 or 0) based on a threshold of 0.5
+# probabilities_nne <- as.factor(ifelse(predicted_probabilities > 0.5, 0, 1))
+# 
+# levels(probabilities_nne) <- c("Healthy","Cancer")
+# levels(probabilities_nne) <- c("Healthy","Cancer")
+# 
+# # Create the confusion matrix
+# confusionMatrix(probabilities_nne, breast_test$Classification)
+# confusionMatrix(probabilities_nne, breast_test$Classification)$byClass["F1"]
+# 
+# # Generate the ROC curve for the neural network
+# nnet_roc <- roc(as.numeric(breast_test$Classification), predicted_probabilities)
+# 
+# # Create a data frame with the values of the ROC curve
+# nnet_roc_data <- data.frame(
+#   fpr = 1 - nnet_roc$specificities,  
+#   tpr = nnet_roc$sensitivities,      
+#   Model = "Neural Network"
+# )
+# 
+# # Plot ROC curve for NN model
+# ggplot(nnet_roc_data, aes(x = fpr, y = tpr, color = Model)) +
+#   geom_line(size = 1.2) +  # Curve line
+#   geom_abline(linetype = "dashed", color = "grey") +  # Reference line (random)
+#   labs(title = "ROC Curve - Neural Network",
+#        x = "1 - Specificity",
+#        y = "Sensitivity") +
+#   scale_color_manual(values = c("Neural Network" = "#fca311")) +  # Color of the curve
+#   theme(plot.title = element_text(hjust = 0.5))
+# 
+# # AUC
+# auc_value_nn <- auc(nnet_roc)
+# cat("AUC:", auc_value_nn, "\n")
+# 
+# # Plot Neural Network Model
+# plotnet(nnet_model)
+
 #########################################################
 # V. Random forest
 #########################################################
@@ -363,6 +606,8 @@ varImp(train_rf)
 #results FALSE = healthy and TRUE = cancer
 ensemble <- cbind(glm = glm_preds == "Healthy", loess = loess_preds == "Healthy",
                   knn = knn_preds == "Healthy", rf = rf_preds == "Healthy")
+                  #knn1 = probabilities_knn1 == "Healthy", tree = probabilities_tree1 == "Healthy",
+                  #svm = probabilities_svm == "Healthy", nne = probabilities_nne == "healthy")
 
 #calculate mean to row (glm,loess, knn,rf) to obtain result ensamble 
 ensemble_preds <- ifelse(rowMeans(ensemble) > 0.5, "Healthy", "Cancer")
@@ -375,11 +620,16 @@ mean(ensemble_preds == breast_test_y)
 #########################################################
 
 #Create a data frame with all results (glm, loess, knn, rf, ensemble)
+#models <- c("Logistic regression", "Loess", "K nearest neighbors", "Random forest", "knn1", "Tree", "SVM", "Neural Network", "Ensemble")
 models <- c("Logistic regression", "Loess", "K nearest neighbors", "Random forest", "Ensemble")
 accuracy <- c(mean(glm_preds == breast_test_y),
               mean(loess_preds == breast_test_y),
               mean(knn_preds == breast_test_y),
               mean(rf_preds == breast_test_y),
+              # mean(probabilities_knn1 == breast_test_y),
+              # mean(probabilities_tree1 == breast_test_y),
+              # mean(probabilities_svm == breast_test_y),
+              # mean(probabilities_nne == breast_test_y),
               mean(ensemble_preds == breast_test_y))
 results <- data.frame(Model = models, Accuracy = accuracy)
 
