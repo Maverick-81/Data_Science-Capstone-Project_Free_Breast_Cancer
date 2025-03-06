@@ -61,7 +61,7 @@ if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-pr
 if(!require(corrr)) install.packages("corrr", repos = "http://cran.us.r-project.org")
 if(!require(ggcorrplot)) install.packages("ggcorrplot", repos = "http://cran.us.r-project.org")
 if(!require(factoextra)) install.packages("factoextra", repos = "http://cran.us.r-project.org")
-if(!require(ucimlrepo)) install.packages("recosystem", repos = "http://cran.us.r-project.org")
+if(!require(ucimlrepo)) install.packages("ucimlrepo", repos = "http://cran.us.r-project.org")
 if(!require(gam)) install.packages("gam", repos = "http://cran.us.r-project.org")
 if(!require(splines)) install.packages("splines", repos = "http://cran.us.r-project.org")
 if(!require(foreach)) install.packages("foreach", repos = "http://cran.us.r-project.org")
@@ -613,6 +613,10 @@ results <- data.frame(Model = models, Accuracy = accuracy)
 kable(results, caption = "Accuracy to detect breast cancer through 9 biomarkers") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), html_font = "Tahoma" ) %>%
   footnote(general = "Results of differents methods of machine learning use.")
+```
+
+```{r}
+
 ```
 
 # **5. CONCLUSION** {#conclusion}

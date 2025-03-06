@@ -16,17 +16,18 @@ if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-pr
 if(!require(corrr)) install.packages("corrr", repos = "http://cran.us.r-project.org")
 if(!require(ggcorrplot)) install.packages("ggcorrplot", repos = "http://cran.us.r-project.org")
 if(!require(factoextra)) install.packages("factoextra", repos = "http://cran.us.r-project.org")
-if(!require(ucimlrepo)) install.packages("recosystem", repos = "http://cran.us.r-project.org")
+if(!require(ucimlrepo)) install.packages("ucimlrepo", repos = "http://cran.us.r-project.org")
 if(!require(gam)) install.packages("gam", repos = "http://cran.us.r-project.org")
 if(!require(splines)) install.packages("splines", repos = "http://cran.us.r-project.org")
 if(!require(foreach)) install.packages("foreach", repos = "http://cran.us.r-project.org")
-# if(!require(pROC)) install.packages("pROC", repos = "http://cran.us.r-project.org")
+if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
+if(!require(pROC)) install.packages("pROC", repos = "http://cran.us.r-project.org")
 # if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
 # if(!require(ada)) install.packages("ada", repos = "http://cran.us.r-project.org")
-# if(!require(rpart.plot)) install.packages("rpart.plot", repos = "http://cran.us.r-project.org")
+if(!require(rpart.plot)) install.packages("rpart.plot", repos = "http://cran.us.r-project.org")
 # if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
-# if(!require(nnet)) install.packages("nnet", repos = "http://cran.us.r-project.org")
-# if(!require(NeuralNetTools)) install.packages("NeuralNetTools", repos = "http://cran.us.r-project.org")
+if(!require(nnet)) install.packages("nnet", repos = "http://cran.us.r-project.org")
+if(!require(NeuralNetTools)) install.packages("NeuralNetTools", repos = "http://cran.us.r-project.org")
 
 # Libraries required to run the proyect
 library(tidyverse)
@@ -42,13 +43,14 @@ library(ucimlrepo)
 library(gam)
 library(splines)
 library(foreach)
-# library(pROC)
-# library(rpart)
+library(randomForest)
+library(pROC)
+library(rpart)
 # library(ada)
 # library(rpart.plot)
 # library(e1071)
-# library(nnet)
-# library(NeuralNetTools)
+library(nnet)
+library(NeuralNetTools)
 
 options(digits = 5)
 options(timeout = 120)
@@ -505,69 +507,69 @@ mean(knn_preds == breast_test_y)
 # . Neuronal Network
 #########################################################
 
-# # Preprocess the data by handling missing values and scaling the features
-# breast_train[is.na(breast_train)] <- lapply(breast_train, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
-# breast_test[is.na(breast_test)] <- lapply(breast_test, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
-# 
-# # Scale features to ensure that the neural network performs well
-# train_data_scaled <- scale(breast_train[, c("Glucose", "Insulin", "HOMA", "Resistin")])
-# test_data_scaled <- scale(breast_test[, c("Glucose", "Insulin", "HOMA", "Insulin")])
-# 
-# 
-# # Convert scaled data back to data frame format
-# breast_train_nn <- data.frame(breast_train[, "Classification"], train_data_scaled)
-# colnames(breast_train_nn) <- c("Classification", "Glucose", "Insulin", "HOMA", "Resistin")
-# breast_test_nn <- data.frame(breast_test[, "Classification"], test_data_scaled)
-# colnames(breast_test_nn) <- c("Classification", "Glucose", "Insulin", "HOMA", "Resistin")
-# 
-# # Train the neural network model with adjusted parameters
-# nnet_model <- nnet(Classification ~ Glucose + Insulin + HOMA + Insulin, 
-#                    data = breast_train_nn, 
-#                    size = 15,        
-#                    maxit = 1500,     
-#                    linout = FALSE,   
-#                    trace = FALSE,    
-#                    decay = 1)      
-# 
-# # Make predictions on the test set (probabilities)
-# predicted_probabilities <- predict(nnet_model, breast_test, type ="raw")
-# 
-# # Convert probabilities to binary labels (1 or 0) based on a threshold of 0.5
-# probabilities_nne <- as.factor(ifelse(predicted_probabilities > 0.5, 0, 1))
-# 
-# levels(probabilities_nne) <- c("Healthy","Cancer")
-# levels(probabilities_nne) <- c("Healthy","Cancer")
-# 
-# # Create the confusion matrix
-# confusionMatrix(probabilities_nne, breast_test$Classification)
-# confusionMatrix(probabilities_nne, breast_test$Classification)$byClass["F1"]
-# 
-# # Generate the ROC curve for the neural network
-# nnet_roc <- roc(as.numeric(breast_test$Classification), predicted_probabilities)
-# 
-# # Create a data frame with the values of the ROC curve
-# nnet_roc_data <- data.frame(
-#   fpr = 1 - nnet_roc$specificities,  
-#   tpr = nnet_roc$sensitivities,      
-#   Model = "Neural Network"
-# )
-# 
-# # Plot ROC curve for NN model
-# ggplot(nnet_roc_data, aes(x = fpr, y = tpr, color = Model)) +
-#   geom_line(size = 1.2) +  # Curve line
-#   geom_abline(linetype = "dashed", color = "grey") +  # Reference line (random)
-#   labs(title = "ROC Curve - Neural Network",
-#        x = "1 - Specificity",
-#        y = "Sensitivity") +
-#   scale_color_manual(values = c("Neural Network" = "#fca311")) +  # Color of the curve
-#   theme(plot.title = element_text(hjust = 0.5))
-# 
-# # AUC
-# auc_value_nn <- auc(nnet_roc)
-# cat("AUC:", auc_value_nn, "\n")
-# 
-# # Plot Neural Network Model
-# plotnet(nnet_model)
+# Preprocess the data by handling missing values and scaling the features
+breast_train[is.na(breast_train)] <- lapply(breast_train, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
+breast_test[is.na(breast_test)] <- lapply(breast_test, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
+
+# Scale features to ensure that the neural network performs well
+train_data_scaled <- scale(breast_train[, c("Glucose", "Insulin", "HOMA", "Resistin")])
+test_data_scaled <- scale(breast_test[, c("Glucose", "Insulin", "HOMA", "Resistin")])
+
+
+# Convert scaled data back to data frame format
+breast_train_nn <- data.frame(breast_train[, "Classification"], train_data_scaled)
+colnames(breast_train_nn) <- c("Classification", "Glucose", "Insulin", "HOMA", "Resistin")
+breast_test_nn <- data.frame(breast_test[, "Classification"], test_data_scaled)
+colnames(breast_test_nn) <- c("Classification", "Glucose", "Insulin", "HOMA", "Resistin")
+
+# Train the neural network model with adjusted parameters
+nnet_model <- nnet(Classification ~ Glucose + Insulin + HOMA + Resistin,
+                   data = breast_train_nn,
+                   size = 15,
+                   maxit = 1500,
+                   linout = FALSE,
+                   trace = FALSE,
+                   decay = 1)
+
+# Make predictions on the test set (probabilities)
+predicted_probabilities <- predict(nnet_model, breast_test, type ="raw")
+
+# Convert probabilities to binary labels (1 or 0) based on a threshold of 0.5
+probabilities_nne <- as.factor(ifelse(predicted_probabilities > 0.5, 0, 1))
+
+levels(probabilities_nne) <- c("Healthy","Cancer")
+levels(probabilities_nne) <- c("Healthy","Cancer")
+
+# Create the confusion matrix
+confusionMatrix(probabilities_nne, breast_test$Classification)
+confusionMatrix(probabilities_nne, breast_test$Classification)$byClass["F1"]
+
+# Generate the ROC curve for the neural network
+nnet_roc <- roc(as.numeric(breast_test$Classification), predicted_probabilities)
+
+# Create a data frame with the values of the ROC curve
+nnet_roc_data <- data.frame(
+  fpr = 1 - nnet_roc$specificities,
+  tpr = nnet_roc$sensitivities,
+  Model = "Neural Network"
+)
+
+# Plot ROC curve for NN model
+ggplot(nnet_roc_data, aes(x = fpr, y = tpr, color = Model)) +
+  geom_line(size = 1.2) +  # Curve line
+  geom_abline(linetype = "dashed", color = "grey") +  # Reference line (random)
+  labs(title = "ROC Curve - Neural Network",
+       x = "1 - Specificity",
+       y = "Sensitivity") +
+  scale_color_manual(values = c("Neural Network" = "#fca311")) +  # Color of the curve
+  theme(plot.title = element_text(hjust = 0.5))
+
+# AUC
+auc_value_nn <- auc(nnet_roc)
+cat("AUC:", auc_value_nn, "\n")
+
+# Plot Neural Network Model
+plotnet(nnet_model)
 
 #########################################################
 # V. Random forest
